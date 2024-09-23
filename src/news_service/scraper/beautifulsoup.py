@@ -1,11 +1,17 @@
 from bs4 import BeautifulSoup
 import asyncio
 import requests
+from news_service.scraper.config import AntiBlockSetting
 
 class BeautifulSoupScraper:
+    def __init__(self) -> None:
+        self.headers = requests.utils.default_headers()
+        self.headers.update({
+            'User-Agent': AntiBlockSetting.USER_AGENT.value[0],
+        })
 
     async def scrape(self, url: str, selectors: list[str] = ['p']):
-        response = requests.get(url)
+        response = requests.get(url, headers=self.headers)
         html = BeautifulSoup(response.content, 'html.parser')
         text_content = html.find_all(selectors)
         text = ''

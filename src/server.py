@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from news_service.news.duckduckgo import DuckduckgoNews
 from news_service.scraper.beautifulsoup import BeautifulSoupScraper
-
+from news_service.llms.ollama import OllamaChat
 app = FastAPI()
 
 
@@ -17,8 +17,10 @@ async def check_health():
 async def collect_news():
     news_data = await DuckduckgoNews.get_news(query='經濟', limit=2)
     news_urls = [news['url'] for news in news_data]
+    news_titles = [news['title'] for news in news_data]
     news_content = await BeautifulSoupScraper().batch_scrape(urls=news_urls)
-    print(news_content)
+    summary = await OllamaChat().summarize(news_content=news_content[0], news_title=news_data[0]['title'])
+    print(summary)
     return {
         'status': 'success',
         'status_code': 200,
