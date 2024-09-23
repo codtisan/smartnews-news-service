@@ -1,0 +1,8 @@
+[project]
+port = 8000
+version = ''
+environment = ''
+
+[vectorstore]
+type = ''
+url = ''
