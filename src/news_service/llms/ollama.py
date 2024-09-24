@@ -20,3 +20,8 @@ class OllamaChat:
         summarized_tasks = [self.summarize(content, news_titles[index]) for index, content in enumerate(new_contents)]
         results = await asyncio.gather(*summarized_tasks)
         return results
+    
+    async def embed(self, documents: list[str]):
+        response = ollama.embed(model=self.model, input=documents)
+        return response['embeddings']
+    

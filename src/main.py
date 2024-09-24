@@ -1,8 +1,10 @@
 import uvicorn
 from server import app
 import toml
+from setup import setup
 
 def bootstrap() -> None:
+    setup()
     with open('config.toml') as file:
         config = toml.load(file)
     port = config['project']['port']
